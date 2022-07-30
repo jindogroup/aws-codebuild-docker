@@ -4,11 +4,11 @@ phases:
   build:
     commands:
       - cd $CODEBUILD_SRC_DIR/ubuntu/standard/5.0
-      - docker build -t aws/codebuild/standard:5.0 .
+      - docker build -t aws-codebuild-docker:5.0 .
       - docker tag aws-codebuild-docker:5.0 298851404202.dkr.ecr.us-east-1.amazonaws.com/aws-codebuild-docker:5.0
       - docker push 298851404202.dkr.ecr.us-east-1.amazonaws.com/aws-codebuild-docker:5.0
       - cd $CODEBUILD_SRC_DIR/ubuntu/standard/6.0
-      - docker build -t aws/codebuild/standard:6.0 .
+      - docker build -t aws-codebuild-docker:6.0 .
       - docker push aws-codebuild-docker
       - docker tag aws-codebuild-docker:6.0 298851404202.dkr.ecr.us-east-1.amazonaws.com/aws-codebuild-docker:6.0
       - docker push 298851404202.dkr.ecr.us-east-1.amazonaws.com/aws-codebuild-docker:6.0
