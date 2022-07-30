@@ -98,6 +98,32 @@ RUN curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o /tmp/awscli
     && rm /tmp/awscliv2.zip \
     && rm -rf /opt/aws \
     && aws --version
+# Install DevOps Tools
+
+ENV PS1="\u \W\$ "
+
+
+ENV HELM_VERSION=3.5.2 \
+    HELMFILE_VERSION=0.138.4 \
+    YQ_VERSION=2.3.0 \
+    HELM_DIFF_VERSION=3.1.3 \
+    HELM_SECRETS_VERSION=3.5.0
+
+RUN curl -L -o /usr/local/bin/helmfile https://github.com/roboll/helmfile/releases/download/v${HELMFILE_VERSION}/helmfile_linux_amd64 \
+    && chmod +x /usr/local/bin/helmfile
+
+RUN wget -O /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64 \
+    && chmod +x /usr/local/bin/yq
+
+RUN curl -L https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz > /tmp/helm-v${HELM_VERSION}-linux-amd64.tar.gz \
+    && tar zxv -C /tmp -f /tmp/helm-v${HELM_VERSION}-linux-amd64.tar.gz \
+    && mv /tmp/linux-amd64/helm /usr/local/bin/helm \
+    && rm -rf /tmp/linux-amd64 \
+    && rm -f /tmp/helm-v${HELM_VERSION}-linux-amd64.tar.gz
+
+RUN set -x \
+    && helm plugin install https://github.com/databus23/helm-diff --version ${HELM_DIFF_VERSION} \
+    && helm plugin install https://github.com/jkroepke/helm-secrets --version ${HELM_SECRETS_VERSION}
 
 # Install env tools for runtimes
 # Dotnet
@@ -110,7 +136,7 @@ RUN set -ex  \
 ARG SRC_DIR="/usr/src"
 ARG N_SRC_DIR="$SRC_DIR/n"
 RUN git clone https://github.com/tj/n $N_SRC_DIR \
-     && cd $N_SRC_DIR && make install 
+     && cd $N_SRC_DIR && make install
 
 #ruby
 ARG RBENV_SRC_DIR="/usr/local/rbenv"
