@@ -4,6 +4,7 @@ phases:
   build:
     commands:
       - cd $CODEBUILD_SRC_DIR/ubuntu/standard/5.0
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 298851404202.dkr.ecr.us-east-1.amazonaws.com
       - docker build -t aws-codebuild-docker:5.0 .
       - docker tag aws-codebuild-docker:5.0 298851404202.dkr.ecr.us-east-1.amazonaws.com/aws-codebuild-docker:5.0
       - docker push 298851404202.dkr.ecr.us-east-1.amazonaws.com/aws-codebuild-docker:5.0
